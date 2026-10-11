@@ -25,25 +25,33 @@ These are **actual Grafana screenshots captured from the project presentation**,
 
 KPIs, live dispatch risk map, and zone risk matrix. The dashboard is configured to refresh every five seconds.
 
-![Smart Dispatch Control Room dashboard overview](screenshots/dashboard-overview.png)
+<img width="1600" height="900" alt="ds-1 sda" src="https://github.com/user-attachments/assets/80cd613a-1be8-4ddf-85a7-fac2fee55e2e" />
+
 
 ### 2. ETA and delay-driver analysis
 
 Baseline versus live ETA, factor contributions, ETA multiplier timeline, and traffic speed trends.
 
-![ETA and delay-driver analysis](screenshots/eta-and-delay-analysis.png)
+<img width="1600" height="900" alt="ds-2 sda" src="https://github.com/user-attachments/assets/af47ebed-b28e-4111-8650-f5b117600153" />
+
 
 ### 3. Explainability and current risk ranking
 
 Shows the input factors, final multiplier, live ETA, and current risk ranking by zone.
 
-![Explainability and risk ranking](screenshots/explainability-and-risk-ranking.png)
+<img width="1600" height="900" alt="ds-2 sda" src="https://github.com/user-attachments/assets/027b8661-36fe-4535-a701-7c52bd0f930b" />
+
+
+<img width="1600" height="900" alt="ds-3 sda" src="https://github.com/user-attachments/assets/f6f6dbef-237b-4581-a640-0146c65c0dbd" />
+
+
 
 ### 4. Alert, audit and fleet views
 
 The full Grafana dashboard also includes alert-tier distribution, alert event history, dispatch audit records, and simulated ambulance fleet panels.
 
-![Alert and audit panels](screenshots/alert-and-audit-panels.png)
+<img width="1600" height="900" alt="ds-5 sda" src="https://github.com/user-attachments/assets/76529c02-4b37-4b3e-a942-95b6ac672123" />
+
 
 ---
 
