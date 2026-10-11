@@ -1,19 +1,75 @@
-# Smart Dispatch Control Room
+# 🚑 Smart Dispatch Control Room
+
 ### Real-Time Emergency Dispatch Intelligence for Delhi
 
-A Streaming Data Analytics project that simulates how traffic, incidents, weather/road conditions and ambulance movement can affect emergency-response ETAs across five Delhi zones. Events stream through **Apache Kafka**, are processed with **Python**, persisted in **MySQL**, and visualised in **Grafana**.
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Apache Kafka](https://img.shields.io/badge/Streaming-Apache%20Kafka-231F20?logo=apachekafka&logoColor=white)
+![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?logo=mysql&logoColor=white)
+![Grafana](https://img.shields.io/badge/Dashboard-Grafana-F46800?logo=grafana&logoColor=white)
+![Project](https://img.shields.io/badge/Project-Academic%20Prototype-6C5CE7)
+![Data](https://img.shields.io/badge/Data-Synthetic-orange)
 
-> **Academic simulation:** Traffic, incident, weather/road-event readings and ambulance telemetry are synthetic. Routes and coordinates are illustrative—not live GPS or turn-by-turn navigation. This prototype must not be used for real emergency-dispatch decisions.
+> **From streaming events to explainable emergency-response insights.**
 
-## Project overview
+Smart Dispatch Control Room is a Streaming Data Analytics project that simulates how traffic, incidents, weather/road conditions and ambulance movement can affect emergency-response ETAs across five Delhi zones. Events stream through **Apache Kafka**, are processed with **Python**, stored in **MySQL**, and visualised in **Grafana**.
 
-- **Domain:** Emergency services / public safety
-- **Pipeline:** Kafka producers → Python consumer and dispatch logic → MySQL → Grafana
-- **Zones:** Connaught Place, AIIMS Corridor, Ring Road South, Dwarka Expressway and Nehru Place
-- **Dashboard refresh:** 5 seconds
-- **Outputs:** Explainable zone-level ETA multipliers, risk tiers, alert history and simulated ambulance positions
+> ⚠️ **Academic simulation only:** Traffic, incident, weather/road-event readings and ambulance telemetry are synthetic. Routes and coordinates are illustrative—not live GPS or turn-by-turn navigation. This prototype must not be used for real emergency-dispatch decisions.
 
-## Architecture
+---
+
+## 📸 Dashboard screenshots
+
+These are **actual Grafana screenshots captured from the project presentation**, not mockups.
+
+### 1. Live control-room overview
+
+KPIs, live dispatch risk map, and zone risk matrix. The dashboard is configured to refresh every five seconds.
+
+![Smart Dispatch Control Room dashboard overview](screenshots/dashboard-overview.png)
+
+### 2. ETA and delay-driver analysis
+
+Baseline versus live ETA, factor contributions, ETA multiplier timeline, and traffic speed trends.
+
+![ETA and delay-driver analysis](screenshots/eta-and-delay-analysis.png)
+
+### 3. Explainability and current risk ranking
+
+Shows the input factors, final multiplier, live ETA, and current risk ranking by zone.
+
+![Explainability and risk ranking](screenshots/explainability-and-risk-ranking.png)
+
+### 4. Alert, audit and fleet views
+
+The full Grafana dashboard also includes alert-tier distribution, alert event history, dispatch audit records, and simulated ambulance fleet panels.
+
+![Alert and audit panels](screenshots/alert-and-audit-panels.png)
+
+---
+
+## ✨ What's inside
+
+The project combines four event streams into one operational view.
+
+| Component | What it does |
+|---|---|
+| 🚦 Traffic stream | Publishes synthetic zone-level traffic-speed events |
+| 🚨 Incident stream | Publishes incident-demand and severity events |
+| 🌦️ Zone context stream | Publishes weather and road-event context |
+| 🚑 Ambulance stream | Publishes simulated ambulance-position updates |
+| 🧠 Dispatch consumer | Calculates explainable ETA multipliers, risk tiers and alert transitions |
+| 🗄️ MySQL | Stores decisions, alerts, route information and ambulance telemetry |
+| 📊 Grafana | Displays KPIs, zone risk, ETA comparisons, alert history and the simulated fleet |
+
+## 🗺️ Zones covered
+
+- Connaught Place
+- AIIMS Corridor
+- Ring Road South
+- Dwarka Expressway
+- Nehru Place
+
+## 🧱 Architecture
 
 ```text
 Synthetic scenario data
@@ -28,20 +84,7 @@ Synthetic scenario data
                                                         Grafana operations dashboard
 ```
 
-The consumer listens to all four Kafka topics, maintains the latest zone readings, calculates and smooths a delay multiplier, records decisions and alert transitions, and stores synthetic ambulance telemetry for visualisation.
-
-## Features
-
-- Four Kafka streams: traffic speed, incident demand, weather/road context and simulated ambulance positions.
-- Five-zone monitoring with configurable baseline speeds and ETAs.
-- Explainable delay factors: speed drop, incident severity, rain intensity and road-event severity.
-- Bounded ETA multiplier and smoothing to limit abrupt changes.
-- **NORMAL**, **WARNING** and **CRITICAL** alert tiers, with tier changes written to an alert log.
-- MySQL tables for decisions, alerts, hospitals, routes and ambulance positions.
-- Grafana dashboard with **22 panels**, including KPI cards, risk map, zone risk matrix, ETA comparisons, factor contributions, time series, alert history, audit log, explainability and live ambulance fleet.
-- Scripted calm → incident → recovery scenario for reproducible demonstrations.
-
-## Technology stack
+## ⚙️ Technology stack
 
 | Component | Purpose |
 |---|---|
@@ -51,7 +94,7 @@ The consumer listens to all four Kafka topics, maintains the latest zone reading
 | Grafana | Live dashboard and map visualisation |
 | Docker | Recommended for running supporting services locally |
 
-## Key files
+## 📂 Key files
 
 | File | Purpose |
 |---|---|
@@ -66,165 +109,122 @@ The consumer listens to all four Kafka topics, maintains the latest zone reading
 | `dispatch_consumer.py` | Consumes streams, calculates decisions and writes MySQL records |
 | `traffic_speed.csv`, `incident_demand.csv`, `zone_context.csv` | Synthetic input data |
 | `Smart_Dispatch_Control_Room_Continuous.json` | Grafana dashboard export |
+| `screenshots/` | Actual dashboard screenshots embedded above |
 
-## Prerequisites
+## 🚀 Setup
 
-- Python 3.10 or later
-- A running Kafka broker (plus Zookeeper if required by your Kafka distribution)
-- MySQL with a user permitted to create the project database and tables
-- Grafana with network access to the same MySQL instance
-- Docker Desktop or equivalent is recommended for the supporting services
+### Prerequisites
 
-This repository does **not** include a Docker Compose file to provision infrastructure. Start Kafka and MySQL before running the Python pipeline, and ensure Grafana can connect to that MySQL instance.
+- Python 3.10+
+- A running Kafka broker (and Zookeeper if required by your Kafka distribution)
+- MySQL with permission to create the project database and tables
+- Grafana with network access to MySQL
 
-## Setup
+This repository does not include a Docker Compose file for provisioning infrastructure. Start Kafka and MySQL before running the Python pipeline.
 
-### 1. Clone the repository
+### 1. Clone and install
 
 ```bash
 git clone https://github.com/065010-AmanMalhi/Group-1-Smart-Dispatch-Control-Room.git
 cd Group-1-Smart-Dispatch-Control-Room
+python -m venv .venv
 ```
-
-### 2. Create a virtual environment and install dependencies
 
 **Windows PowerShell:**
 
 ```powershell
-python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
 pip install -r requirements.txt
+Copy-Item .env.example .env
+notepad .env
 ```
 
 **macOS/Linux:**
 
 ```bash
-python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
 pip install -r requirements.txt
+cp .env.example .env
 ```
 
-### 3. Configure environment variables
+Set the MySQL username/password and confirm `KAFKA_BOOTSTRAP_SERVERS`, `MYSQL_HOST` and `MYSQL_PORT` in `.env`. Never commit `.env` or real credentials. The consumer creates the `sda_smart_dispatch` database and required tables at startup.
 
-Copy `.env.example` to `.env` and edit the values for your environment. The `.env` file is excluded by `.gitignore`; **never commit real passwords or API credentials**.
-
-```powershell
-# Windows PowerShell
-Copy-Item .env.example .env
-notepad .env
-```
-
-At minimum, set the correct MySQL username/password and check `KAFKA_BOOTSTRAP_SERVERS`, `MYSQL_HOST` and `MYSQL_PORT`. Hostnames depend on where Python runs: host-run Python commonly uses `localhost`; containers on the same Docker network commonly use a service/container name.
-
-The consumer creates the `sda_smart_dispatch` database and required tables at startup. The configured MySQL user needs sufficient privileges to do this.
-
-### 4. Generate synthetic input data
+### 2. Generate synthetic data
 
 ```bash
 python generate_data.py
 ```
 
-The generator writes `traffic_speed.csv`, `incident_demand.csv` and `zone_context.csv`. The scripted scenario lasts approximately 75 seconds and includes calm, incident and recovery phases. Example events include a major accident on Ring Road South, heavy rain in the AIIMS Corridor, and VIP movement/road closure in Connaught Place. Dwarka Expressway and Nehru Place act as calmer comparison zones.
+### 3. Start the consumer
 
-### 5. Run the pipeline
+```bash
+python dispatch_consumer.py
+```
 
-Start the consumer first, then run each producer in a separate terminal. Activate the same virtual environment in each terminal.
+### 4. Start the producers
 
-| Terminal | Command | Stream |
-|---|---|---|
-| 1 | `python dispatch_consumer.py` | Consumes all four topics and writes MySQL |
-| 2 | `python traffic_speed_producer.py` | Traffic speed |
-| 3 | `python incident_demand_producer.py` | Incident demand |
-| 4 | `python context_producer.py` | Weather and road events |
-| 5 | `python ambulance_producer.py` | Synthetic ambulance positions |
+Run each in a separate terminal with the virtual environment activated:
 
-Wait until the consumer reports that it is listening before starting the producers. Scenario producers replay generated data continuously; the ambulance producer publishes position updates on its configured interval. Stop processes with **Ctrl+C**.
+```bash
+python traffic_speed_producer.py
+python incident_demand_producer.py
+python context_producer.py
+python ambulance_producer.py
+```
 
-## Grafana dashboard
+Start the consumer before the producers. Stop processes with **Ctrl+C**.
 
-1. Open your Grafana instance. The default local address is often `http://localhost:3000`; use the port mapped by your own setup.
-2. Add a **MySQL** data source pointing to the MySQL service and database `sda_smart_dispatch`.
-3. Confirm Grafana can reach MySQL using the host/container network address and credentials appropriate to your environment.
-4. Navigate to **Dashboards → Import**.
-5. Upload **`Smart_Dispatch_Control_Room_Continuous.json`**.
-6. Map the dashboard's **MySQL** input to the data source you configured.
-7. Set the time range to **Last 5 minutes** and confirm refresh is **5s**.
+## 📊 Import the Grafana dashboard
 
-The dashboard export contains **22 panels**, including:
+1. Open Grafana (often `http://localhost:3000`; use your configured port).
+2. Configure a MySQL data source for database `sda_smart_dispatch`.
+3. Select **Dashboards → Import**.
+4. Upload `Smart_Dispatch_Control_Room_Continuous.json`.
+5. Map the dashboard's MySQL input to your configured data source.
+6. Select **Last 5 minutes** and set refresh to **5s**.
 
-- Critical alerts, zones at risk, average live ETA, maximum ETA delay, average speed and multiplier KPIs
-- Active incidents and zones monitored
-- Live dispatch risk map and zone risk matrix
-- Baseline-versus-live ETA and delay-driver contributions
-- ETA multiplier, traffic speed and ETA-delay time series
-- Alert-tier distribution and alert event log
-- Dispatch audit log, explainable factor breakdown and current risk ranking
-- Live ambulance fleet table and map
+The dashboard export contains 22 panels: KPI cards, live risk map, zone risk matrix, baseline-versus-live ETA, factor contribution, timelines, alert history, audit log, explainability, risk ranking and live ambulance fleet.
 
-If Grafana cannot connect to MySQL, verify the hostname from Grafana's runtime environment, database name, credentials and network configuration. A hostname that works from your Windows terminal may not work from inside a Grafana container.
+## 🧮 Dispatch logic
 
-## Dispatch logic
-
-The consumer combines current zone readings using configurable weights in `config.py`:
+The configured factor weights are:
 
 - Speed-drop weight: **0.40**
 - Incident-severity weight: **0.35**
 - Weather weight: **0.15**
 - Road-event weight: **0.30**
 
-The raw result is bounded by the configured minimum and maximum multiplier. A smoothing limit constrains how much the final multiplier can change per decision cycle. The displayed ETA is calculated as:
+The displayed ETA is:
 
 ```text
 live_eta_min = baseline_eta_min × final_multiplier
 ```
 
-Alert thresholds are configured in `config.py`: WARNING begins at a multiplier of **1.30** and CRITICAL at **1.55**. When a zone changes severity tier, the consumer records an alert event rather than duplicating an alert every cycle.
+The configured WARNING threshold begins at multiplier **1.30**; CRITICAL begins at **1.55**. The consumer records tier transitions to the alert log. These values are scenario parameters, not validated real-world emergency dispatch rules.
 
-These weights and thresholds are scenario parameters for an academic prototype, not medically validated dispatch rules.
+## 🗄️ MySQL tables
 
-## Database tables
+- `dispatch_decisions` — decision factors, multiplier, ETA and reason
+- `alerts_log` — alert-tier transitions
+- `hospitals` — simulated hospital markers
+- `ambulance_routes` — predefined route waypoints
+- `ambulance_positions` — synthetic fleet telemetry
 
-The pipeline creates and uses these tables in `sda_smart_dispatch`:
-
-- `dispatch_decisions` — input factors, multiplier, ETA and decision reason
-- `alerts_log` — changes in alert severity
-- `hospitals` — hospital markers used in the simulation
-- `ambulance_routes` — ordered route points for the simulated fleet
-- `ambulance_positions` — current and historical synthetic position telemetry
-
-Optional sanity check (replace the container name and MySQL username for your environment; the command prompts for a password):
-
-```bash
-docker exec -it <mysql-container-name> mysql -u<mysql-user> -p -e "SELECT zone, MAX(final_multiplier) AS peak, MAX(live_eta_min) AS worst_eta FROM sda_smart_dispatch.dispatch_decisions GROUP BY zone ORDER BY peak DESC;"
-```
-
-## Troubleshooting
-
-| Symptom | Checks |
-|---|---|
-| Python cannot connect to Kafka | Confirm the broker is running and `KAFKA_BOOTSTRAP_SERVERS` is reachable from the Python process |
-| No new MySQL rows | Start the consumer first, then producers; verify credentials and consumer logs |
-| Grafana panels are empty | Check the selected MySQL data source, database, time range and whether producers are running |
-| Grafana cannot connect to MySQL | Use a hostname reachable from Grafana; verify Docker networking and credentials |
-| Kafka import error | Activate the project virtual environment and run `pip install -r requirements.txt` |
-| No simulated ambulance movement | Start `ambulance_producer.py`, then verify its Kafka topic, MySQL connection and consumer logs |
-
-## Team
+## 👥 Team
 
 - **Akshit Kansal** — 065008
 - **Aman Malhi** — 065010
 - **Kavya Makkar** — 065031
 - **Mayank Jha** — 065036
 
-## Limitations and future scope
+## ⚠️ Limitations
 
-- Event and ambulance telemetry are synthetic; there is no live traffic, weather, dispatch-system or GPS integration.
-- Routes are illustrative waypoint sequences, not road-network navigation.
-- Scoring weights and alert thresholds have not been calibrated against historical emergency-response outcomes.
-- A production version would require validated data feeds, robust failure handling, access control, monitoring, privacy safeguards, security review and validation with emergency-service experts.
+- All traffic, incident, context and ambulance data is synthetic.
+- Routes are illustrative and are not live road-network navigation.
+- There is no integration with live GPS, traffic, weather or emergency-service systems.
+- Scoring weights and alert thresholds have not been calibrated against historical response outcomes.
+- A real deployment would require validated feeds, security controls, robust failure handling, and expert validation.
 
-## License
+## 📄 License
 
 No license is currently specified. Add a license file if you intend others to reuse this project.
