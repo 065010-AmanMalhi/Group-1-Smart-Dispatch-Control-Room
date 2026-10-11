@@ -1,0 +1,376 @@
+scenario_second,zone,rain_intensity,road_event_severity
+0,Connaught Place,0.02,0.02
+0,AIIMS Corridor,0.03,0.03
+0,Ring Road South,0.01,0.01
+0,Dwarka Expressway,0.01,0.03
+0,Nehru Place,0.02,0.03
+1,Connaught Place,0.01,0.01
+1,AIIMS Corridor,0.03,0.03
+1,Ring Road South,0.02,0.02
+1,Dwarka Expressway,0.01,0.03
+1,Nehru Place,0.02,0.02
+2,Connaught Place,0.01,0.03
+2,AIIMS Corridor,0.01,0.02
+2,Ring Road South,0.02,0.02
+2,Dwarka Expressway,0.03,0.02
+2,Nehru Place,0.02,0.01
+3,Connaught Place,0.02,0.01
+3,AIIMS Corridor,0.02,0.02
+3,Ring Road South,0.03,0.01
+3,Dwarka Expressway,0.02,0.02
+3,Nehru Place,0.03,0.03
+4,Connaught Place,0.01,0.02
+4,AIIMS Corridor,0.02,0.03
+4,Ring Road South,0.02,0.02
+4,Dwarka Expressway,0.01,0.01
+4,Nehru Place,0.03,0.02
+5,Connaught Place,0.02,0.02
+5,AIIMS Corridor,0.02,0.01
+5,Ring Road South,0.03,0.01
+5,Dwarka Expressway,0.01,0.02
+5,Nehru Place,0.01,0.03
+6,Connaught Place,0.01,0.01
+6,AIIMS Corridor,0.03,0.02
+6,Ring Road South,0.01,0.03
+6,Dwarka Expressway,0.01,0.03
+6,Nehru Place,0.01,0.01
+7,Connaught Place,0.02,0.01
+7,AIIMS Corridor,0.02,0.01
+7,Ring Road South,0.01,0.03
+7,Dwarka Expressway,0.01,0.02
+7,Nehru Place,0.01,0.01
+8,Connaught Place,0.02,0.02
+8,AIIMS Corridor,0.02,0.02
+8,Ring Road South,0.03,0.02
+8,Dwarka Expressway,0.01,0.02
+8,Nehru Place,0.03,0.01
+9,Connaught Place,0.03,0.03
+9,AIIMS Corridor,0.02,0.02
+9,Ring Road South,0.03,0.01
+9,Dwarka Expressway,0.02,0.02
+9,Nehru Place,0.02,0.02
+10,Connaught Place,0.03,0.01
+10,AIIMS Corridor,0.01,0.02
+10,Ring Road South,0.01,0.02
+10,Dwarka Expressway,0.02,0.02
+10,Nehru Place,0.02,0.03
+11,Connaught Place,0.02,0.02
+11,AIIMS Corridor,0.02,0.01
+11,Ring Road South,0.02,0.03
+11,Dwarka Expressway,0.02,0.03
+11,Nehru Place,0.02,0.01
+12,Connaught Place,0.02,0.01
+12,AIIMS Corridor,0.02,0.02
+12,Ring Road South,0.02,0.01
+12,Dwarka Expressway,0.02,0.02
+12,Nehru Place,0.02,0.01
+13,Connaught Place,0.03,0.01
+13,AIIMS Corridor,0.03,0.01
+13,Ring Road South,0.01,0.02
+13,Dwarka Expressway,0.03,0.02
+13,Nehru Place,0.02,0.02
+14,Connaught Place,0.02,0.01
+14,AIIMS Corridor,0.02,0.02
+14,Ring Road South,0.03,0.03
+14,Dwarka Expressway,0.02,0.03
+14,Nehru Place,0.02,0.02
+15,Connaught Place,0.02,0.01
+15,AIIMS Corridor,0.02,0.01
+15,Ring Road South,0.01,0.03
+15,Dwarka Expressway,0.02,0.03
+15,Nehru Place,0.02,0.03
+16,Connaught Place,0.03,0.03
+16,AIIMS Corridor,0.03,0.02
+16,Ring Road South,0.02,0.01
+16,Dwarka Expressway,0.03,0.03
+16,Nehru Place,0.02,0.01
+17,Connaught Place,0.02,0.02
+17,AIIMS Corridor,0.02,0.01
+17,Ring Road South,0.03,0.02
+17,Dwarka Expressway,0.02,0.01
+17,Nehru Place,0.02,0.01
+18,Connaught Place,0.02,0.01
+18,AIIMS Corridor,0.02,0.02
+18,Ring Road South,0.02,0.02
+18,Dwarka Expressway,0.03,0.02
+18,Nehru Place,0.01,0.01
+19,Connaught Place,0.01,0.02
+19,AIIMS Corridor,0.02,0.02
+19,Ring Road South,0.02,0.02
+19,Dwarka Expressway,0.02,0.02
+19,Nehru Place,0.03,0.01
+20,Connaught Place,0.02,0.83
+20,AIIMS Corridor,0.81,0.02
+20,Ring Road South,0.02,0.1
+20,Dwarka Expressway,0.02,0.02
+20,Nehru Place,0.01,0.02
+21,Connaught Place,0.01,0.82
+21,AIIMS Corridor,0.78,0.02
+21,Ring Road South,0.01,0.1
+21,Dwarka Expressway,0.01,0.02
+21,Nehru Place,0.02,0.02
+22,Connaught Place,0.03,0.88
+22,AIIMS Corridor,0.77,0.03
+22,Ring Road South,0.01,0.1
+22,Dwarka Expressway,0.03,0.03
+22,Nehru Place,0.02,0.02
+23,Connaught Place,0.02,0.84
+23,AIIMS Corridor,0.77,0.01
+23,Ring Road South,0.02,0.1
+23,Dwarka Expressway,0.02,0.03
+23,Nehru Place,0.03,0.01
+24,Connaught Place,0.03,0.83
+24,AIIMS Corridor,0.81,0.02
+24,Ring Road South,0.02,0.1
+24,Dwarka Expressway,0.02,0.02
+24,Nehru Place,0.01,0.02
+25,Connaught Place,0.01,0.85
+25,AIIMS Corridor,0.83,0.02
+25,Ring Road South,0.02,0.1
+25,Dwarka Expressway,0.03,0.01
+25,Nehru Place,0.01,0.01
+26,Connaught Place,0.02,0.87
+26,AIIMS Corridor,0.81,0.01
+26,Ring Road South,0.03,0.1
+26,Dwarka Expressway,0.03,0.03
+26,Nehru Place,0.02,0.03
+27,Connaught Place,0.02,0.86
+27,AIIMS Corridor,0.81,0.03
+27,Ring Road South,0.02,0.1
+27,Dwarka Expressway,0.01,0.02
+27,Nehru Place,0.02,0.02
+28,Connaught Place,0.01,0.85
+28,AIIMS Corridor,0.78,0.02
+28,Ring Road South,0.01,0.1
+28,Dwarka Expressway,0.01,0.03
+28,Nehru Place,0.03,0.02
+29,Connaught Place,0.02,0.85
+29,AIIMS Corridor,0.8,0.03
+29,Ring Road South,0.03,0.1
+29,Dwarka Expressway,0.03,0.02
+29,Nehru Place,0.02,0.02
+30,Connaught Place,0.01,0.81
+30,AIIMS Corridor,0.77,0.03
+30,Ring Road South,0.02,0.1
+30,Dwarka Expressway,0.02,0.01
+30,Nehru Place,0.01,0.02
+31,Connaught Place,0.02,0.85
+31,AIIMS Corridor,0.77,0.02
+31,Ring Road South,0.02,0.1
+31,Dwarka Expressway,0.02,0.02
+31,Nehru Place,0.03,0.02
+32,Connaught Place,0.01,0.82
+32,AIIMS Corridor,0.81,0.02
+32,Ring Road South,0.02,0.1
+32,Dwarka Expressway,0.03,0.03
+32,Nehru Place,0.02,0.02
+33,Connaught Place,0.01,0.84
+33,AIIMS Corridor,0.84,0.02
+33,Ring Road South,0.02,0.1
+33,Dwarka Expressway,0.03,0.02
+33,Nehru Place,0.02,0.03
+34,Connaught Place,0.03,0.86
+34,AIIMS Corridor,0.83,0.02
+34,Ring Road South,0.02,0.1
+34,Dwarka Expressway,0.02,0.02
+34,Nehru Place,0.02,0.02
+35,Connaught Place,0.01,0.83
+35,AIIMS Corridor,0.84,0.02
+35,Ring Road South,0.01,0.1
+35,Dwarka Expressway,0.01,0.03
+35,Nehru Place,0.01,0.03
+36,Connaught Place,0.03,0.88
+36,AIIMS Corridor,0.76,0.02
+36,Ring Road South,0.03,0.1
+36,Dwarka Expressway,0.02,0.01
+36,Nehru Place,0.03,0.03
+37,Connaught Place,0.03,0.82
+37,AIIMS Corridor,0.8,0.02
+37,Ring Road South,0.02,0.1
+37,Dwarka Expressway,0.02,0.02
+37,Nehru Place,0.02,0.02
+38,Connaught Place,0.02,0.83
+38,AIIMS Corridor,0.82,0.02
+38,Ring Road South,0.03,0.1
+38,Dwarka Expressway,0.03,0.03
+38,Nehru Place,0.02,0.02
+39,Connaught Place,0.02,0.85
+39,AIIMS Corridor,0.84,0.03
+39,Ring Road South,0.03,0.1
+39,Dwarka Expressway,0.02,0.02
+39,Nehru Place,0.03,0.02
+40,Connaught Place,0.01,0.88
+40,AIIMS Corridor,0.83,0.02
+40,Ring Road South,0.03,0.1
+40,Dwarka Expressway,0.03,0.01
+40,Nehru Place,0.02,0.03
+41,Connaught Place,0.01,0.85
+41,AIIMS Corridor,0.79,0.01
+41,Ring Road South,0.01,0.1
+41,Dwarka Expressway,0.01,0.03
+41,Nehru Place,0.02,0.01
+42,Connaught Place,0.03,0.88
+42,AIIMS Corridor,0.81,0.03
+42,Ring Road South,0.01,0.1
+42,Dwarka Expressway,0.03,0.02
+42,Nehru Place,0.01,0.02
+43,Connaught Place,0.02,0.81
+43,AIIMS Corridor,0.77,0.02
+43,Ring Road South,0.03,0.1
+43,Dwarka Expressway,0.02,0.02
+43,Nehru Place,0.01,0.02
+44,Connaught Place,0.02,0.81
+44,AIIMS Corridor,0.79,0.03
+44,Ring Road South,0.02,0.1
+44,Dwarka Expressway,0.03,0.02
+44,Nehru Place,0.01,0.02
+45,Connaught Place,0.01,0.82
+45,AIIMS Corridor,0.79,0.02
+45,Ring Road South,0.01,0.1
+45,Dwarka Expressway,0.02,0.01
+45,Nehru Place,0.03,0.01
+46,Connaught Place,0.02,0.85
+46,AIIMS Corridor,0.84,0.02
+46,Ring Road South,0.02,0.1
+46,Dwarka Expressway,0.02,0.03
+46,Nehru Place,0.02,0.01
+47,Connaught Place,0.03,0.84
+47,AIIMS Corridor,0.82,0.02
+47,Ring Road South,0.03,0.1
+47,Dwarka Expressway,0.02,0.01
+47,Nehru Place,0.02,0.03
+48,Connaught Place,0.01,0.87
+48,AIIMS Corridor,0.8,0.02
+48,Ring Road South,0.02,0.1
+48,Dwarka Expressway,0.01,0.03
+48,Nehru Place,0.02,0.02
+49,Connaught Place,0.01,0.82
+49,AIIMS Corridor,0.76,0.03
+49,Ring Road South,0.02,0.1
+49,Dwarka Expressway,0.02,0.02
+49,Nehru Place,0.03,0.01
+50,Connaught Place,0.0,0.87
+50,AIIMS Corridor,0.83,0.0
+50,Ring Road South,0.0,0.1
+50,Dwarka Expressway,0.03,0.02
+50,Nehru Place,0.03,0.02
+51,Connaught Place,0.0,0.82
+51,AIIMS Corridor,0.77,0.0
+51,Ring Road South,0.0,0.1
+51,Dwarka Expressway,0.02,0.01
+51,Nehru Place,0.02,0.03
+52,Connaught Place,0.0,0.77
+52,AIIMS Corridor,0.71,0.0
+52,Ring Road South,0.0,0.09
+52,Dwarka Expressway,0.02,0.02
+52,Nehru Place,0.02,0.01
+53,Connaught Place,0.0,0.74
+53,AIIMS Corridor,0.74,0.0
+53,Ring Road South,0.0,0.09
+53,Dwarka Expressway,0.01,0.02
+53,Nehru Place,0.02,0.03
+54,Connaught Place,0.0,0.75
+54,AIIMS Corridor,0.65,0.0
+54,Ring Road South,0.0,0.08
+54,Dwarka Expressway,0.01,0.03
+54,Nehru Place,0.02,0.02
+55,Connaught Place,0.0,0.69
+55,AIIMS Corridor,0.65,0.0
+55,Ring Road South,0.0,0.08
+55,Dwarka Expressway,0.02,0.02
+55,Nehru Place,0.02,0.02
+56,Connaught Place,0.0,0.62
+56,AIIMS Corridor,0.62,0.0
+56,Ring Road South,0.0,0.08
+56,Dwarka Expressway,0.02,0.02
+56,Nehru Place,0.02,0.03
+57,Connaught Place,0.0,0.64
+57,AIIMS Corridor,0.58,0.0
+57,Ring Road South,0.0,0.07
+57,Dwarka Expressway,0.03,0.02
+57,Nehru Place,0.01,0.02
+58,Connaught Place,0.0,0.57
+58,AIIMS Corridor,0.54,0.0
+58,Ring Road South,0.0,0.07
+58,Dwarka Expressway,0.03,0.02
+58,Nehru Place,0.03,0.02
+59,Connaught Place,0.0,0.54
+59,AIIMS Corridor,0.49,0.0
+59,Ring Road South,0.0,0.07
+59,Dwarka Expressway,0.01,0.02
+59,Nehru Place,0.02,0.03
+60,Connaught Place,0.0,0.52
+60,AIIMS Corridor,0.46,0.0
+60,Ring Road South,0.0,0.06
+60,Dwarka Expressway,0.02,0.03
+60,Nehru Place,0.03,0.01
+61,Connaught Place,0.0,0.48
+61,AIIMS Corridor,0.45,0.0
+61,Ring Road South,0.0,0.06
+61,Dwarka Expressway,0.03,0.02
+61,Nehru Place,0.01,0.03
+62,Connaught Place,0.0,0.46
+62,AIIMS Corridor,0.4,0.0
+62,Ring Road South,0.0,0.05
+62,Dwarka Expressway,0.02,0.02
+62,Nehru Place,0.02,0.03
+63,Connaught Place,0.0,0.42
+63,AIIMS Corridor,0.37,0.0
+63,Ring Road South,0.0,0.05
+63,Dwarka Expressway,0.02,0.02
+63,Nehru Place,0.02,0.01
+64,Connaught Place,0.0,0.36
+64,AIIMS Corridor,0.36,0.0
+64,Ring Road South,0.0,0.05
+64,Dwarka Expressway,0.02,0.03
+64,Nehru Place,0.01,0.01
+65,Connaught Place,0.0,0.34
+65,AIIMS Corridor,0.32,0.0
+65,Ring Road South,0.0,0.04
+65,Dwarka Expressway,0.02,0.02
+65,Nehru Place,0.02,0.03
+66,Connaught Place,0.0,0.32
+66,AIIMS Corridor,0.29,0.0
+66,Ring Road South,0.0,0.03
+66,Dwarka Expressway,0.02,0.02
+66,Nehru Place,0.01,0.02
+67,Connaught Place,0.0,0.28
+67,AIIMS Corridor,0.26,0.0
+67,Ring Road South,0.0,0.03
+67,Dwarka Expressway,0.02,0.02
+67,Nehru Place,0.02,0.02
+68,Connaught Place,0.0,0.23
+68,AIIMS Corridor,0.21,0.0
+68,Ring Road South,0.0,0.03
+68,Dwarka Expressway,0.01,0.03
+68,Nehru Place,0.01,0.02
+69,Connaught Place,0.0,0.2
+69,AIIMS Corridor,0.2,0.0
+69,Ring Road South,0.0,0.02
+69,Dwarka Expressway,0.02,0.01
+69,Nehru Place,0.03,0.02
+70,Connaught Place,0.0,0.17
+70,AIIMS Corridor,0.16,0.0
+70,Ring Road South,0.0,0.02
+70,Dwarka Expressway,0.02,0.02
+70,Nehru Place,0.02,0.03
+71,Connaught Place,0.0,0.14
+71,AIIMS Corridor,0.13,0.0
+71,Ring Road South,0.0,0.02
+71,Dwarka Expressway,0.02,0.01
+71,Nehru Place,0.02,0.01
+72,Connaught Place,0.0,0.1
+72,AIIMS Corridor,0.09,0.0
+72,Ring Road South,0.0,0.01
+72,Dwarka Expressway,0.03,0.02
+72,Nehru Place,0.03,0.02
+73,Connaught Place,0.0,0.07
+73,AIIMS Corridor,0.06,0.0
+73,Ring Road South,0.0,0.01
+73,Dwarka Expressway,0.01,0.02
+73,Nehru Place,0.02,0.02
+74,Connaught Place,0.0,0.03
+74,AIIMS Corridor,0.03,0.0
+74,Ring Road South,0.0,0.0
+74,Dwarka Expressway,0.02,0.02
+74,Nehru Place,0.02,0.03

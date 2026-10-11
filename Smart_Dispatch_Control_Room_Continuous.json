@@ -1,0 +1,1581 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_MYSQL",
+      "label": "MySQL",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "mysql",
+      "pluginName": "MySQL"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "9.0.0"
+    },
+    {
+      "type": "datasource",
+      "id": "mysql",
+      "name": "MySQL",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "geomap",
+      "name": "Geomap",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "piechart",
+      "name": "Pie chart",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": "1.0.0"
+    }
+  ],
+  "title": "Smart Dispatch Control Room | Operations + Live Ambulance Fleet",
+  "uid": "smart-dispatch-control-room",
+  "schemaVersion": 38,
+  "version": 4,
+  "refresh": "5s",
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "zone",
+        "type": "query",
+        "label": "Zone",
+        "datasource": "${DS_MYSQL}",
+        "query": "SELECT DISTINCT zone AS __text, zone AS __value FROM dispatch_decisions ORDER BY zone;",
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "refresh": 2,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 0,
+      "type": "text",
+      "title": "",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "# 🚑 Smart Dispatch Control Room\n**Live emergency-vehicle ETA intelligence across 5 Delhi zones** — Kafka → MySQL → Grafana, synthetic streaming scenario with explainable delay factors.\n\n> **Control-room view:** risk, ETA impact, traffic conditions, active incidents and the reason behind every multiplier."
+      }
+    },
+    {
+      "id": 10,
+      "title": "🚨 Critical Alerts",
+      "type": "stat",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT COUNT(*) AS value FROM alerts_log WHERE alert_level='CRITICAL' AND triggered_time >= NOW() - INTERVAL 5 MINUTE;",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 11,
+      "title": "⚠️ Zones at Risk",
+      "type": "stat",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 3,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT COUNT(*) AS value FROM (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l JOIN dispatch_decisions d ON d.decision_id=l.latest_id WHERE d.final_multiplier >= 1.30 AND d.zone REGEXP '${zone:regex}';",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 12,
+      "title": "⏱️ Avg Live ETA",
+      "type": "stat",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT ROUND(AVG(d.live_eta_min),1) AS value FROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id WHERE d.zone REGEXP '${zone:regex}';",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "m",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "red",
+                "value": 12
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 13,
+      "title": "📈 Max ETA Delay",
+      "type": "stat",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 9,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT ROUND(MAX((d.live_eta_min/d.baseline_eta_min-1)*100),1) AS value FROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id WHERE d.zone REGEXP '${zone:regex}';",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 30
+              },
+              {
+                "color": "red",
+                "value": 55
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 14,
+      "title": "🚦 Avg Speed",
+      "type": "stat",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 12,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT ROUND(AVG(d.current_speed_kmph),1) AS value FROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id WHERE d.zone REGEXP '${zone:regex}';",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "kmh",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 20
+              },
+              {
+                "color": "green",
+                "value": 35
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 15,
+      "title": "⚙️ Avg Multiplier",
+      "type": "stat",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 15,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT ROUND(AVG(d.final_multiplier),2) AS value FROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id WHERE d.zone REGEXP '${zone:regex}';",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1.3
+              },
+              {
+                "color": "red",
+                "value": 1.55
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 16,
+      "title": "🚑 Active Incidents",
+      "type": "stat",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 18,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT COALESCE(SUM(d.active_incidents),0) AS value FROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id WHERE d.zone REGEXP '${zone:regex}';",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 17,
+      "title": "📡 Zones Monitored",
+      "type": "stat",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT COUNT(DISTINCT zone) AS value FROM dispatch_decisions WHERE zone REGEXP '${zone:regex}';",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 18,
+      "title": "🗺️ Live Dispatch Risk Map",
+      "type": "geomap",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 11,
+        "w": 14,
+        "x": 0,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1.3
+              },
+              {
+                "color": "red",
+                "value": 1.55
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "view": {
+          "id": "coords",
+          "lat": 28.6139,
+          "lon": 77.209,
+          "zoom": 10
+        },
+        "controls": {
+          "showZoom": true,
+          "showMeasure": true,
+          "showFullscreen": true,
+          "showTooltip": true,
+          "showAttribution": true
+        },
+        "basemap": {
+          "type": "osm-standard",
+          "name": "OpenStreetMap",
+          "config": {}
+        },
+        "layers": [
+          {
+            "config": {
+              "showLegend": true,
+              "style": {
+                "color": {
+                  "field": "final_multiplier",
+                  "fixed": "#5794F2"
+                },
+                "size": {
+                  "field": "live_eta_min",
+                  "fixed": 12
+                },
+                "symbol": {
+                  "fixed": "img/icons/marker/circle.svg"
+                },
+                "opacity": 0.85
+              }
+            },
+            "location": {
+              "mode": "coords",
+              "latitude": "latitude",
+              "longitude": "longitude"
+            },
+            "name": "Zone risk",
+            "tooltip": {
+              "mode": "details"
+            },
+            "type": "markers",
+            "filterData": {
+              "id": "byRefId",
+              "options": "A"
+            }
+          },
+          {
+            "type": "markers",
+            "name": "Hospitals 🏥",
+            "config": {
+              "showLegend": true,
+              "style": {
+                "color": {
+                  "fixed": "blue"
+                },
+                "size": {
+                  "fixed": 14
+                },
+                "symbol": {
+                  "fixed": "img/icons/marker/triangle.svg"
+                },
+                "opacity": 0.9,
+                "textConfig": {
+                  "fontSize": 11,
+                  "textAlign": "center",
+                  "textBaseline": "middle",
+                  "offsetX": 0,
+                  "offsetY": -18
+                }
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "B"
+            },
+            "location": {
+              "mode": "coords",
+              "latitude": "latitude",
+              "longitude": "longitude"
+            },
+            "tooltip": true
+          },
+          {
+            "type": "route",
+            "name": "Route • AMB-101",
+            "config": {
+              "style": {
+                "size": {
+                  "fixed": 4,
+                  "min": 2,
+                  "max": 10
+                },
+                "color": {
+                  "fixed": "dark-blue"
+                },
+                "opacity": 0.65,
+                "symbol": {
+                  "fixed": "img/icons/marker/circle.svg"
+                },
+                "textConfig": {
+                  "fontSize": 10,
+                  "textAlign": "center",
+                  "textBaseline": "middle",
+                  "offsetX": 0,
+                  "offsetY": 0
+                },
+                "rotation": {
+                  "fixed": 0,
+                  "mode": "mod",
+                  "min": -360,
+                  "max": 360
+                },
+                "lineWidth": 2
+              },
+              "arrow": 1
+            },
+            "tooltip": true,
+            "filterData": {
+              "id": "byRefId",
+              "options": "C"
+            },
+            "location": {
+              "mode": "coords",
+              "latitude": "latitude",
+              "longitude": "longitude"
+            }
+          },
+          {
+            "type": "route",
+            "name": "Route • AMB-102",
+            "config": {
+              "style": {
+                "size": {
+                  "fixed": 4,
+                  "min": 2,
+                  "max": 10
+                },
+                "color": {
+                  "fixed": "dark-green"
+                },
+                "opacity": 0.65,
+                "symbol": {
+                  "fixed": "img/icons/marker/circle.svg"
+                },
+                "textConfig": {
+                  "fontSize": 10,
+                  "textAlign": "center",
+                  "textBaseline": "middle",
+                  "offsetX": 0,
+                  "offsetY": 0
+                },
+                "rotation": {
+                  "fixed": 0,
+                  "mode": "mod",
+                  "min": -360,
+                  "max": 360
+                },
+                "lineWidth": 2
+              },
+              "arrow": 1
+            },
+            "tooltip": true,
+            "filterData": {
+              "id": "byRefId",
+              "options": "D"
+            },
+            "location": {
+              "mode": "coords",
+              "latitude": "latitude",
+              "longitude": "longitude"
+            }
+          },
+          {
+            "type": "route",
+            "name": "Route • AMB-103",
+            "config": {
+              "style": {
+                "size": {
+                  "fixed": 4,
+                  "min": 2,
+                  "max": 10
+                },
+                "color": {
+                  "fixed": "orange"
+                },
+                "opacity": 0.65,
+                "symbol": {
+                  "fixed": "img/icons/marker/circle.svg"
+                },
+                "textConfig": {
+                  "fontSize": 10,
+                  "textAlign": "center",
+                  "textBaseline": "middle",
+                  "offsetX": 0,
+                  "offsetY": 0
+                },
+                "rotation": {
+                  "fixed": 0,
+                  "mode": "mod",
+                  "min": -360,
+                  "max": 360
+                },
+                "lineWidth": 2
+              },
+              "arrow": 1
+            },
+            "tooltip": true,
+            "filterData": {
+              "id": "byRefId",
+              "options": "E"
+            },
+            "location": {
+              "mode": "coords",
+              "latitude": "latitude",
+              "longitude": "longitude"
+            }
+          },
+          {
+            "type": "route",
+            "name": "Route • AMB-104",
+            "config": {
+              "style": {
+                "size": {
+                  "fixed": 4,
+                  "min": 2,
+                  "max": 10
+                },
+                "color": {
+                  "fixed": "purple"
+                },
+                "opacity": 0.65,
+                "symbol": {
+                  "fixed": "img/icons/marker/circle.svg"
+                },
+                "textConfig": {
+                  "fontSize": 10,
+                  "textAlign": "center",
+                  "textBaseline": "middle",
+                  "offsetX": 0,
+                  "offsetY": 0
+                },
+                "rotation": {
+                  "fixed": 0,
+                  "mode": "mod",
+                  "min": -360,
+                  "max": 360
+                },
+                "lineWidth": 2
+              },
+              "arrow": 1
+            },
+            "tooltip": true,
+            "filterData": {
+              "id": "byRefId",
+              "options": "F"
+            },
+            "location": {
+              "mode": "coords",
+              "latitude": "latitude",
+              "longitude": "longitude"
+            }
+          },
+          {
+            "type": "route",
+            "name": "Route • AMB-105",
+            "config": {
+              "style": {
+                "size": {
+                  "fixed": 4,
+                  "min": 2,
+                  "max": 10
+                },
+                "color": {
+                  "fixed": "red"
+                },
+                "opacity": 0.65,
+                "symbol": {
+                  "fixed": "img/icons/marker/circle.svg"
+                },
+                "textConfig": {
+                  "fontSize": 10,
+                  "textAlign": "center",
+                  "textBaseline": "middle",
+                  "offsetX": 0,
+                  "offsetY": 0
+                },
+                "rotation": {
+                  "fixed": 0,
+                  "mode": "mod",
+                  "min": -360,
+                  "max": 360
+                },
+                "lineWidth": 2
+              },
+              "arrow": 1
+            },
+            "tooltip": true,
+            "filterData": {
+              "id": "byRefId",
+              "options": "G"
+            },
+            "location": {
+              "mode": "coords",
+              "latitude": "latitude",
+              "longitude": "longitude"
+            }
+          },
+          {
+            "type": "markers",
+            "name": "Live Ambulances 🚑",
+            "config": {
+              "showLegend": true,
+              "style": {
+                "color": {
+                  "field": "final_multiplier",
+                  "fixed": "#5794F2"
+                },
+                "size": {
+                  "fixed": 18
+                },
+                "symbol": {
+                  "fixed": "img/icons/unicons/car.svg"
+                },
+                "opacity": 1.0,
+                "rotation": {
+                  "field": "heading_deg",
+                  "mode": "mod",
+                  "min": -360,
+                  "max": 360
+                },
+                "textConfig": {
+                  "fontSize": 11,
+                  "textAlign": "center",
+                  "textBaseline": "middle",
+                  "offsetX": 0,
+                  "offsetY": -20
+                }
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "H"
+            },
+            "location": {
+              "mode": "coords",
+              "latitude": "latitude",
+              "longitude": "longitude"
+            },
+            "tooltip": true
+          }
+        ],
+        "tooltip": {
+          "mode": "details"
+        }
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT d.zone, d.current_speed_kmph, d.live_eta_min, d.final_multiplier, d.active_incidents, CASE WHEN d.final_multiplier >= 1.55 THEN 'CRITICAL' WHEN d.final_multiplier >= 1.30 THEN 'WARNING' ELSE 'NORMAL' END AS alert_level, CASE d.zone WHEN 'Connaught Place' THEN 28.6315 WHEN 'AIIMS Corridor' THEN 28.5672 WHEN 'Ring Road South' THEN 28.5607 WHEN 'Dwarka Expressway' THEN 28.6250 WHEN 'Nehru Place' THEN 28.5491 END AS latitude, CASE d.zone WHEN 'Connaught Place' THEN 77.2167 WHEN 'AIIMS Corridor' THEN 77.2100 WHEN 'Ring Road South' THEN 77.2385 WHEN 'Dwarka Expressway' THEN 77.0450 WHEN 'Nehru Place' THEN 77.2507 END AS longitude FROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id WHERE d.zone REGEXP '${zone:regex}';",
+          "format": "table",
+          "refId": "A"
+        },
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT hospital_name, address, zone, latitude, longitude FROM hospitals ORDER BY hospital_name;",
+          "format": "table",
+          "refId": "B"
+        },
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT ambulance_id, route_seq, latitude, longitude, cumulative_distance_km FROM ambulance_routes WHERE ambulance_id = 'AMB-101' ORDER BY route_seq;",
+          "format": "table",
+          "refId": "C"
+        },
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT ambulance_id, route_seq, latitude, longitude, cumulative_distance_km FROM ambulance_routes WHERE ambulance_id = 'AMB-102' ORDER BY route_seq;",
+          "format": "table",
+          "refId": "D"
+        },
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT ambulance_id, route_seq, latitude, longitude, cumulative_distance_km FROM ambulance_routes WHERE ambulance_id = 'AMB-103' ORDER BY route_seq;",
+          "format": "table",
+          "refId": "E"
+        },
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT ambulance_id, route_seq, latitude, longitude, cumulative_distance_km FROM ambulance_routes WHERE ambulance_id = 'AMB-104' ORDER BY route_seq;",
+          "format": "table",
+          "refId": "F"
+        },
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT ambulance_id, route_seq, latitude, longitude, cumulative_distance_km FROM ambulance_routes WHERE ambulance_id = 'AMB-105' ORDER BY route_seq;",
+          "format": "table",
+          "refId": "G"
+        },
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT\n  p.ambulance_id,\n  p.hospital,\n  p.destination,\n  p.zone,\n  p.latitude,\n  p.longitude,\n  p.speed_kmph,\n  p.route_progress_pct,\n  p.remaining_distance_km,\n  p.eta_min,\n  p.final_multiplier,\n  p.status,\n  p.event_time,\n  COALESCE(\n    DEGREES(\n      ATAN2(\n        (p.longitude - prev.longitude) * COS(RADIANS(p.latitude)),\n        p.latitude - prev.latitude\n      )\n    ),\n    0\n  ) AS heading_deg\nFROM ambulance_positions p\nLEFT JOIN ambulance_positions prev\n  ON prev.position_id = (\n    SELECT MAX(p2.position_id)\n    FROM ambulance_positions p2\n    WHERE p2.ambulance_id = p.ambulance_id\n      AND p2.position_id < p.position_id\n  )\nJOIN (\n  SELECT ambulance_id, MAX(position_id) AS latest_id\n  FROM ambulance_positions\n  GROUP BY ambulance_id\n) l\n  ON p.position_id = l.latest_id\nORDER BY p.ambulance_id;",
+          "format": "table",
+          "refId": "H"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "title": "📋 Live Zone Risk Matrix",
+      "type": "table",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 11,
+        "w": 10,
+        "x": 14,
+        "y": 7
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT d.zone, ROUND(d.current_speed_kmph,1) speed_kmph, ROUND(d.speed_drop_pct*100,0) speed_drop_pct,\nd.active_incidents, ROUND(d.incident_severity*100,0) incident_pct, ROUND(d.rain_intensity*100,0) rain_pct,\nROUND(d.road_event_severity*100,0) road_event_pct, ROUND(d.final_multiplier,2) multiplier,\nROUND(d.live_eta_min,1) live_eta_min, CASE WHEN d.final_multiplier >= 1.55 THEN 'CRITICAL' WHEN d.final_multiplier >= 1.30 THEN 'WARNING' ELSE 'NORMAL' END alert_level, d.reason\nFROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id\nWHERE d.zone REGEXP '${zone:regex}' ORDER BY d.final_multiplier DESC;",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "alert_level"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "CRITICAL": {
+                        "color": "red",
+                        "index": 0
+                      },
+                      "WARNING": {
+                        "color": "orange",
+                        "index": 1
+                      },
+                      "NORMAL": {
+                        "color": "green",
+                        "index": 2
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 20,
+      "title": "⏱️ Baseline vs Live ETA by Zone",
+      "type": "barchart",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT d.zone, ROUND(d.baseline_eta_min,1) baseline_eta, ROUND(d.live_eta_min,1) live_eta\nFROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id\nWHERE d.zone REGEXP '${zone:regex}' ORDER BY live_eta DESC;",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "m",
+          "decimals": 1
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      }
+    },
+    {
+      "id": 21,
+      "title": "🧩 Delay Driver Contribution by Zone",
+      "type": "barchart",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT d.zone,\nROUND(d.speed_drop_pct*0.40,3) traffic_factor,\nROUND(d.incident_severity*0.35,3) incident_factor,\nROUND(d.rain_intensity*0.15,3) weather_factor,\nROUND(d.road_event_severity*0.30,3) road_event_factor\nFROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id\nWHERE d.zone REGEXP '${zone:regex}' ORDER BY d.final_multiplier DESC;",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 2
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "title": "📈 ETA Multiplier Timeline",
+      "type": "timeseries",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT decision_time AS time, final_multiplier AS value, zone AS metric FROM dispatch_decisions WHERE $__timeFilter(decision_time) AND zone REGEXP '${zone:regex}' ORDER BY decision_time;",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 2,
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12,
+            "showPoints": "never"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1.3
+              },
+              {
+                "color": "red",
+                "value": 1.55
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 23,
+      "title": "🚦 Traffic Speed by Zone",
+      "type": "timeseries",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT decision_time AS time, current_speed_kmph AS value, zone AS metric FROM dispatch_decisions WHERE $__timeFilter(decision_time) AND zone REGEXP '${zone:regex}' ORDER BY decision_time;",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "kmh",
+          "decimals": 1,
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 5
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 24,
+      "title": "⏳ ETA Delay % Over Time",
+      "type": "timeseries",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 36
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT decision_time AS time, ((live_eta_min/baseline_eta_min)-1)*100 AS value, zone AS metric FROM dispatch_decisions WHERE $__timeFilter(decision_time) AND zone REGEXP '${zone:regex}' ORDER BY decision_time;",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 25,
+      "title": "🚨 Alert Tier Distribution",
+      "type": "piechart",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 36
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "\nSELECT\n  SUM(alert_level = 'NORMAL') AS NORMAL,\n  SUM(alert_level = 'WARNING') AS WARNING,\n  SUM(alert_level = 'CRITICAL') AS CRITICAL\nFROM alerts_log\nWHERE $__timeFilter(triggered_time)\n  AND zone REGEXP '${zone:regex}';\n",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "NORMAL"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "WARNING"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "orange"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CRITICAL"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "pieType": "donut",
+        "displayLabels": [
+          "name",
+          "value",
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        }
+      }
+    },
+    {
+      "id": 26,
+      "title": "🚨 Alert Event Log",
+      "type": "table",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 45
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "alert_level"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "CRITICAL": {
+                        "color": "red",
+                        "index": 0
+                      },
+                      "WARNING": {
+                        "color": "orange",
+                        "index": 1
+                      },
+                      "NORMAL": {
+                        "color": "green",
+                        "index": 2
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "\nSELECT triggered_time, zone, alert_level, final_multiplier, live_eta_min, message\nFROM alerts_log\nORDER BY triggered_time DESC\nLIMIT 20;\n",
+          "format": "table",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "title": "🧾 Dispatch Audit Log",
+      "type": "table",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 45
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "\nSELECT decision_time, zone, baseline_eta_min, live_eta_min, final_multiplier, reason\nFROM dispatch_decisions\nWHERE $__timeFilter(decision_time) AND zone REGEXP '${zone:regex}'\nORDER BY decision_time DESC\nLIMIT 50;\n",
+          "format": "table",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "title": "🔍 Explainable Factor Breakdown",
+      "type": "table",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 54
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "\nSELECT d.zone, d.speed_drop_pct, d.incident_severity, d.rain_intensity, d.road_event_severity,\n       d.final_multiplier, d.live_eta_min, d.reason\nFROM dispatch_decisions d\nJOIN (SELECT zone, MAX(decision_id) AS latest_id FROM dispatch_decisions GROUP BY zone) latest\n  ON d.decision_id = latest.latest_id\nWHERE d.zone REGEXP '${zone:regex}'\nORDER BY d.final_multiplier DESC;\n",
+          "format": "table",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "title": "🏷️ Current Risk Ranking",
+      "type": "table",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 63
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT d.zone, ROUND(d.final_multiplier,2) multiplier, ROUND((d.live_eta_min/d.baseline_eta_min-1)*100,1) eta_delay_pct,\nROUND(d.current_speed_kmph,1) speed_kmph, d.reason\nFROM dispatch_decisions d JOIN (SELECT zone, MAX(decision_id) latest_id FROM dispatch_decisions GROUP BY zone) l ON d.decision_id=l.latest_id\nWHERE d.zone REGEXP '${zone:regex}' ORDER BY multiplier DESC;",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 30,
+      "title": "🚑 Live Ambulance Fleet",
+      "type": "table",
+      "datasource": "${DS_MYSQL}",
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 71
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": "${DS_MYSQL}",
+          "rawSql": "SELECT\n  p.ambulance_id AS 'Ambulance',\n  p.hospital AS 'Hospital',\n  p.destination AS 'Destination',\n  p.zone AS 'Zone',\n  p.status AS 'Status',\n  ROUND(p.route_progress_pct,1) AS 'Progress %',\n  ROUND(p.remaining_distance_km,2) AS 'Remaining km',\n  ROUND(p.eta_min,1) AS 'ETA min',\n  ROUND(p.speed_kmph,1) AS 'Speed km/h',\n  p.event_time AS 'Last GPS update'\nFROM ambulance_positions p\nJOIN (\n  SELECT ambulance_id, MAX(position_id) AS latest_id\n  FROM ambulance_positions\n  GROUP BY ambulance_id\n) l ON p.position_id = l.latest_id\nORDER BY p.ambulance_id;",
+          "format": "table",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "timepicker": {
+    "time_options": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "6h",
+      "12h",
+      "1d",
+      "2d",
+      "7d",
+      "30d"
+    ],
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h"
+    ]
+  },
+  "description": "Live ambulance dispatch dashboard. Grafana auto-refresh is set to 5 seconds; the live ambulance map layer and fleet table read the newest position_id for each ambulance from ambulance_positions."
+}
